@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  div.btn-group button {
+    @apply m-0;
+    &:first-child {
+      @apply rounded-r-none;
+    }
+    &:last-child {
+      @apply rounded-l-none;
+    }
+    &:not(:first-child):not(:last-child) {
+      @apply rounded-none border-x-0;
+    }
+  }
+}

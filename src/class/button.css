@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .btn {
+    @apply px-4
+        py-2
+        mx-1
+        border 
+        rounded-md 
+        transition-all 
+        ease-in
+        duration-100;
+    &:hover {
+      @apply duration-200 ease-out rounded-2xl;
+    }
+    &:active {
+      @apply duration-200 ease-out;
+    }
+    &[disabled],
+    &:disabled {
+      @apply cursor-not-allowed opacity-50;
+    }
+    &.success {
+      @apply text-green-500;
+    }
+    &.warning {
+      @apply text-yellow-500;
+    }
+    &.error {
+      @apply text-red-500;
+    }
+  }
+}
+
+@layer components {
+  /* .btn.basic - defined as default above */
+  .btn.accent {
+    @apply bg-indigo-500 text-white;
+    &.success {
+      @apply bg-green-500 text-white;
+    }
+    &.warning {
+      @apply bg-yellow-500 text-white;
+    }
+    &.error {
+      @apply bg-red-500 text-white;
+    }
+  }
+
+  .btn.text {
+    @apply text-indigo-500 border-indigo-500;
+    &.success {
+      @apply text-green-500 border-green-200;
+    }
+    &.warning {
+      @apply text-yellow-500 border-yellow-200;
+    }
+    &.error {
+      @apply text-red-500 border-red-200;
+    }
+  }
+
+  .btn.sm {
+    @apply px-3 py-1.5 text-sm;
+  }
+
+  .btn.lg {
+    @apply px-5 py-3 text-lg;
+  }
+
+  /* 
+   * if we want to overwrite the default css style of things like hover, disabled, etc
+   * it needs to be done in the components layer and not in the base layer,
+   * because the base layer is applied first and then the components layer 
+   */
+
+  div.btn-group .btn {
+    @apply m-0;
+    &:first-child {
+      @apply rounded-r-none;
+    }
+    &:last-child {
+      @apply rounded-l-none;
+    }
+    &:not(:first-child):not(:last-child) {
+      @apply rounded-none border-x-0;
+    }
+  }
+}
