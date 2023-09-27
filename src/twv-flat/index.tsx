@@ -1,6 +1,6 @@
 import React, { ButtonHTMLAttributes, PropsWithChildren } from "react";
-import { twMerge } from "tailwind-merge";
 import "./button.css";
+import twv from "./twv";
 
 export const Variants = ["basic", "accent", "text"] as const;
 export type Variant = (typeof Variants)[number];
@@ -13,13 +13,13 @@ export type Severity = (typeof Severities)[number];
 
 const buttonClassName = {
   base: "mx-1 border rounded-md transition-all easy-in duration-200",
-  hover: "hover:duration-200 hover:ease-out hover:rounded-2xl",
-  active: "active:duration-200 active:ease-out",
-  disabled:
-    "disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none disable",
+  hover: "duration-200 ease-out rounded-2xl",
+  active: "duration-200 ease-out",
+  disabled: "cursor-not-allowed opacity-50 pointer-events-none",
 
   variant: {
     basic: {
+      default: true, // make this variant the default
       base: "",
       severity: {
         info: "",
@@ -48,11 +48,16 @@ const buttonClassName = {
     },
   },
   size: {
-    sm: "px-3 py-1.5 text-sm",
+    sm: {
+      default: true, // make this variant the default
+      base: "px-3 py-1.5 text-sm",
+    },
     md: "px-4 py-2 text-base",
     lg: "px-5 py-3 text-lg",
   },
 };
+
+const buttonClassNameBuilder = twv(buttonClassName);
 
 export type ButtonOurProps = {
   variant?: Variant;
@@ -72,13 +77,17 @@ function Button(props: ButtonProps) {
     severity = "info",
     className = "",
   } = props;
-  const cm = twMerge(
-    buttonClassName.base,
-    buttonClassName.hover,
-    buttonClassName.active,
-    buttonClassName.disabled,
-    buttonClassName.variant[variant].base,
-    buttonClassName.size[size],
+
+  // if we add default variants in the definition then we can pass props and
+  // className from props can be added to the end of twMerge
+  let cm = buttonClassNameBuilder(
+    props,
+    buttonClassName.variant[variant].severity[severity]
+  );
+
+  // otherwise we have to pass the variant explicitly and className as the last param
+  cm = buttonClassNameBuilder(
+    { variant, size, severity },
     buttonClassName.variant[variant].severity[severity],
     className
   );
